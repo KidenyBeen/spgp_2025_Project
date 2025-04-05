@@ -61,15 +61,11 @@
 4. 방해물(폭탄/곰인형) 등장 → 터치로 제거
 5. 일정 시간 후 '손' 등장 → 반복 터치로 제거 시도
 6. 체력 0 또는 조건 달성 시 게임 종료
-![시작화면](https://github.com/user-attachments/assets/617d6c58-d5be-4b27-bc3b-d2ada5ecb680)
-
-![로비화면](https://github.com/user-attachments/assets/064c8150-d33e-4ab8-a99a-76fd7d00fff7)
-
-![게임화면1](https://github.com/user-attachments/assets/30cc499c-4b8e-413b-9a49-fb3957655da8)
-
-![게임화면2](https://github.com/user-attachments/assets/476561f2-809b-4b57-ba06-774a355e657f)
-
-![게임화면3](https://github.com/user-attachments/assets/a17f6515-e00e-45c1-884d-a0cb64d1d2eb)
+<img src="https://github.com/user-attachments/assets/617d6c58-d5be-4b27-bc3b-d2ada5ecb680" width="300" height="500" alt="시작화면"/>
+<img src="https://github.com/user-attachments/assets/064c8150-d33e-4ab8-a99a-76fd7d00fff7" width="300" height="500" alt="로비화면"/>
+<img src="https://github.com/user-attachments/assets/30cc499c-4b8e-413b-9a49-fb3957655da8" width="300" height="500" alt="게임화면1"/>
+<img src="https://github.com/user-attachments/assets/476561f2-809b-4b57-ba06-774a355e657f" width="300" height="500" alt="게임화면2"/>
+<img src="https://github.com/user-attachments/assets/a17f6515-e00e-45c1-884d-a0cb64d1d2eb" width="300" height="500" alt="게임화면3"/>
 
 ---
 
