@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "HeroOnDoma"
 include(":app")
+
+include("a2dg")
  
