@@ -3,6 +3,7 @@ package com.example.ajm1222.and.heroondoma.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +23,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            startActivity(new Intent(this, HeroOnDomaActivity.class));
-        }
-        return super.onTouchEvent(event);
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            startActivity(new Intent(this, HeroOnDomaActivity.class));
+//        }
+//        return super.onTouchEvent(event);
+//    }
+
+    public void onBtnStartGame(View view) {
+        // start game activity here
+
+    }
+    public void onBtnOption(View view) {
+        // start game activity here
+
     }
 }
