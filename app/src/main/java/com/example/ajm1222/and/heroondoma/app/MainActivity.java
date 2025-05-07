@@ -23,13 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            startActivity(new Intent(this, HeroOnDomaActivity.class));
-//        }
-//        return super.onTouchEvent(event);
-//    }
 
     public void onBtnStartGame(View view) {
         // start game activity here
