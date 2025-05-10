@@ -26,6 +26,8 @@ public class MainScene extends Scene {
 
         this.score = new Score(R.mipmap.number_24x32, 850f, 50f, 60f);
         score.setScore(12345);
+
+        add(Layer.controller, new FruitsGenerator(this));
         //add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
 
         //add(Layer.controller, new CollisionChecker(this)); //
