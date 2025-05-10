@@ -14,7 +14,7 @@ public class MainScene extends Scene {
 
     //private final Score score;
     public enum Layer {
-         enemy, ui,controller;
+         Fruit, ui, controller;
         public static final int COUNT = values().length;
     }
 
@@ -22,13 +22,13 @@ public class MainScene extends Scene {
     public MainScene()
     {
 
-        initLayers(Layer.COUNT);
+        initLayers(Layer.COUNT); //Scene내에 Layer 종류별로 배열을 초기화
 
         this.score = new Score(R.mipmap.number_24x32, 850f, 50f, 60f);
         score.setScore(12345);
-        add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
+        //add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
 
-        add(Layer.controller, new CollisionChecker());
+        //add(Layer.controller, new CollisionChecker(this)); //
 
     }
 

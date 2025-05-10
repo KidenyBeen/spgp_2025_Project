@@ -18,18 +18,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
     }
 
-
     public void onBtnStartGame(View view) {
-        // start game activity here
+
+        startActivity(new Intent(this, HeroOnDomaActivity.class));
 
     }
     public void onBtnOption(View view) {
-        // start game activity here
+
 
     }
 }

@@ -18,7 +18,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //GameView gameView = new GameView(this);
         gameView = new GameView(this);
 
         setContentView(gameView); //직접 view를 띄우는 방식
@@ -37,7 +36,8 @@ public class GameActivity extends AppCompatActivity {
 
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
-        public void handleOnBackPressed() {
+        public void handleOnBackPressed()
+        {
             gameView.onBackPressed();
         }
     };

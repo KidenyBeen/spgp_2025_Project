@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.IGameObject;
 import com.example.ajm1222.and.a2dg.framework.res.BitmapPool;
@@ -11,6 +12,7 @@ import com.example.ajm1222.and.a2dg.framework.util.RectUtil;
 import com.example.ajm1222.and.a2dg.framework.view.GameView;
 
 public class Sprite implements IGameObject {
+    private static final String TAG = Sprite.class.getSimpleName();
     protected Bitmap bitmap;
     protected Rect srcRect = null;
     protected final RectF dstRect = new RectF();
@@ -21,6 +23,11 @@ public class Sprite implements IGameObject {
         if (mipmapId != 0) {
             bitmap = BitmapPool.get(mipmapId);
         }
+        Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
+    }
+    public Sprite(int mipmapId, float x, float y, float width, float height) {
+        this(mipmapId);
+        setPosition(x, y, width, height);
     }
 
     public void setPosition(float x, float y, float radius) {
@@ -37,6 +44,10 @@ public class Sprite implements IGameObject {
         this.height = height;
         radius = Math.min(width, height) / 2;
         RectUtil.setRect(dstRect, x, y, width, height);
+    }
+
+    public void setImageResourceId(int mipmapId) {
+        bitmap = BitmapPool.get(mipmapId);
     }
 
     @Override

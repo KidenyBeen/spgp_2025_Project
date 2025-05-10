@@ -49,7 +49,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
 
 //    private Scene scene;
-    private ArrayList<Scene> sceneStack = new ArrayList<>();
+    private ArrayList<Scene> sceneStack = new ArrayList<>(); //Scene을 스택으로 관리
     private static long previousNanos; //
     public static float frameTime; //프레임 간격 시간을 의미하는듯?
 
@@ -137,8 +137,8 @@ public class GameView extends View implements Choreographer.FrameCallback {
         scene.onEnter();
     }
 
-    public void onBackPressed() {
-        int last = sceneStack.size() - 1;
+    public void onBackPressed() { //뒤로 가기 버튼
+        int last = sceneStack.size() - 1; //스택의 인덱스
         //if (last < 0) return; // finish activity here ?
 
         if (last < 0) { //Stack이 완전히 비어 있을 때에도 Back 버튼에 의하여 Activity가 종료가 가능하게 바뀐것
@@ -199,19 +199,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
     //private long lastUpdateTime = 0;
     private void scheduleUpdate() // postDelayed로 일정 주기마다 호출되도록 설정하고 있다.
     {
-//        postDelayed(gameLoopRunnable
-//        ,1000/60); // 1/60 60프레임
 
-        // 무조건 1000/60이 아니라 프레임간의 간격 시간을 구해서 최대 거기까지 기다리도록 설정하는 방법.
-//        long now = System.currentTimeMillis();
-//        long elapsedSinceLastUpdate = now - lastUpdateTime;
-//        long targetDelay = 1000/60;
-//        long delay = Math.max(0,targetDelay - elapsedSinceLastUpdate);
-//
-//        postDelayed(gameLoopRunnable,delay);
-//        lastUpdateTime = now;
-
-        //Choreographer.getInstance().postFrameCallback(gameLoopCallback);
         Choreographer.getInstance().postFrameCallback(this);
     }
 
@@ -232,37 +220,10 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
     }
 
-//   private final Choreographer.FrameCallback gameLoopCallback = new Choreographer.FrameCallback() {
-//       @Override
-//       public void doFrame(long nanos) {
-//           update();
-//           invalidate();
-//           scheduleUpdate();
-//       }
-//   };
-
-
-// 이건 postDelayed를 사용해서 1/60초 만들었을때 쓴 것
-//    private final Runnable gameLoopRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            update();
-//            invalidate();
-//            scheduleUpdate();
-//        }
-//    };
 
     private void update() // 게임 루프에서 돌아가는 함수니까 move => update로 이름을 변경했다
     {
-//        for (BouncingCircle bc : circles) {
-//            bc.update();
-//        }
-//        for (Ball ball : balls) {
-//            ball.update();
-//        }
-//        fighter.update();
 
-        //Log.d(TAG, "com.example.ajm1222.and.samplegame.game.Ball Rect = " + ballRect);
         Scene scene = getTopScene();
         if(scene != null)
         {

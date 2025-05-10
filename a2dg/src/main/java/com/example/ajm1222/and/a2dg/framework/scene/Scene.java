@@ -18,10 +18,10 @@ import java.util.HashMap;
 public class Scene {
     //Scene은 GameObject들의 집합으로 봐야해
     private static final String TAG = Scene.class.getSimpleName();
-    protected ArrayList<ArrayList<IGameObject>> layers = new ArrayList<>();
+    protected ArrayList<ArrayList<IGameObject>> layers = new ArrayList<>(); //오브젝트들은 레이어로 관리된다.
 
     // Game Object Management
-    protected void initLayers(int layerCount) { //레이어안에 오브젝트들을 초기화 시켜주는거
+    protected void initLayers(int layerCount) { //레이어 안에 오브젝트들을 초기화 시켜주는거
         layers.clear();
         for (int i = 0; i < layerCount; i++) {
             layers.add(new ArrayList<>());
