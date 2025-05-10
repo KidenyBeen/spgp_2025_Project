@@ -103,7 +103,8 @@
 
 GitHub Insights의 Commit 기록과 실제 날짜 기준 정리를 아래에 함께 첨부합니다.
 
-<img src="https://github.com/your-repo-path/assets/your-image.png" width="600"/>
+<img src="https://github.com/user-attachments/assets/4070cbc6-449c-4f80-8e73-26e8d1703c3c" width="600" alt="커밋 그래프 요약"/>
+<img src="https://github.com/user-attachments/assets/fc0d9eff-97ef-4ddc-a5db-838d9a0eeb2c" width="600" alt="커밋 상세 날짜"/>
 
 | 주차  | 날짜 범위           | Commit 수 |
 |-------|---------------------|-----------|
