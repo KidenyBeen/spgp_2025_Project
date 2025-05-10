@@ -1,7 +1,11 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
+
+import com.example.ajm1222.and.a2dg.framework.objects.Button;
 import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.GameView;
@@ -9,8 +13,17 @@ import com.example.ajm1222.and.a2dg.framework.view.Metrics;
 import com.example.ajm1222.and.heroondoma.R;
 
 public class LobyScene extends Scene {
+    private static final String TAG = LobyScene.class.getSimpleName();
     public enum Layer {
-        ui, controller;
+        ui, controller, touch;
+        public static final int COUNT = values().length;
+    }
+
+    public enum Mode
+    {
+        TIME_LIMITED,    // 시간 제한 모드
+        SCORE_TARGET,    // 목표 점수 모드
+        INFINITE;         // 무한 모드
         public static final int COUNT = values().length;
     }
 
@@ -29,26 +42,61 @@ public class LobyScene extends Scene {
         buttonW = 600f;
         buttonH = 200f;
 
-        add(Layer.ui, new Sprite(R.mipmap.mode1, cx, startY, buttonW, buttonH));
-        add(Layer.ui, new Sprite(R.mipmap.mode2, cx, startY + gap, buttonW, buttonH));
-        add(Layer.ui, new Sprite(R.mipmap.mode3, cx, startY + gap * 2, buttonW, buttonH));
-    }
+        add(Layer.touch, new Button(R.mipmap.mode1, cx, startY, buttonW, buttonH, new Button.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(boolean pressed) {
+                Log.d(TAG, "Button: TIME_LIMITED");
+                ChangeMode(Mode.TIME_LIMITED);
+                return false;
+            }
+        }));
 
+        add(Layer.touch, new Button(R.mipmap.mode2, cx, startY + gap, buttonW, buttonH,new Button.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(boolean pressed) {
+                Log.d(TAG, "Button: SCORE_TARGET");
+                ChangeMode(Mode.SCORE_TARGET);
+                return false;
+            }
+        }));
+        add(Layer.touch, new Button(R.mipmap.mode3, cx, startY + gap * 2, buttonW, buttonH,new Button.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(boolean pressed) {
+                Log.d(TAG, "Button: INFINITE");
+                ChangeMode(Mode.INFINITE);
+                return false;
+            }
+        }));
+    }
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                float[] xy = Metrics.fromScreen(event.getX(), event.getY());
-                if (xy[0] < 100 && xy[1] < 100) {
-
-                    MainScene mainScene = new MainScene();
-                    GameView.view.pushScene(mainScene);
-                    return false;
-                }
-                return true;
-        }
-        return false;
+    protected int getTouchLayerIndex() {
+        return Layer.touch.ordinal();
     }
+    private void ChangeMode(Mode mode)
+    {
+        MainScene mainScene = new MainScene(mode);
+        GameView.view.pushScene(mainScene);
+
+    }
+
+//    @Override //이게 있으면 터치 이벤트가 동작을 안하네
+//    public boolean onTouchEvent(MotionEvent event) {
+////        switch (event.getAction()) {
+////            case MotionEvent.ACTION_DOWN:
+////            case MotionEvent.ACTION_MOVE:
+////                float[] xy = Metrics.fromScreen(event.getX(), event.getY());
+////                if (xy[0] < 100 && xy[1] < 100) {
+////
+////                    MainScene mainScene = new MainScene();
+////                    GameView.view.pushScene(mainScene);
+////                    return false;
+////                }
+////                return true;
+////        }
+//        return false;
+//    }
 
 }

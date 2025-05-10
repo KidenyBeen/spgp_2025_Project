@@ -19,7 +19,7 @@ public class MainScene extends Scene {
     }
 
 
-    public MainScene()
+    public MainScene(LobyScene.Mode mode)
     {
 
         initLayers(Layer.COUNT); //Scene내에 Layer 종류별로 배열을 초기화
