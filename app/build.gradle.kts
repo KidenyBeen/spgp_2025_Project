@@ -7,6 +7,10 @@ android {
     compileSdk = 35
 
     buildFeatures {
+        viewBinding = true
+    }
+
+    buildFeatures {
         buildConfig = true
     }
 
