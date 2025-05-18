@@ -1,7 +1,9 @@
 package com.example.ajm1222.and.heroondoma.game;
 
 import android.graphics.Rect;
+import android.graphics.RectF;
 
+import com.example.ajm1222.and.a2dg.framework.interfaces.IBoxCollidable;
 import com.example.ajm1222.and.a2dg.framework.interfaces.ILayerProvider;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.AnimSprite;
@@ -11,7 +13,7 @@ import com.example.ajm1222.and.a2dg.framework.view.GameView;
 import com.example.ajm1222.and.heroondoma.R;
 import java.util.Random;
 
-public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainScene.Layer>
+public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILayerProvider<MainScene.Layer>
 {
     private final Random random = new Random();
     public static final int Fruits_COUNT = 8;
@@ -20,6 +22,7 @@ public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainS
 
     private static final int BORDER = 0;
 
+    protected RectF collisionRect = new RectF();
     private float targetX, targetY;
     public static Fruits get(int index, float x, float y, float targetX, float targetY)
     {
@@ -38,6 +41,7 @@ public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainS
         setPosition(x, y, width,height);
         this.targetX = targetX;
         this.targetY = targetY;
+        updateCollisionRect();
         // 방향 벡터 계산
         dx = targetX - x;
         dy = targetY - y;
@@ -58,6 +62,10 @@ public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainS
         srcRect.set(left, top, left + SIZE, top + SIZE);
     }
 
+    private void updateCollisionRect() {
+        collisionRect.set(dstRect);
+        //collisionRect.inset(50f, 50f);
+    }
     @Override
     public void update() {
         // dx, dy는 방향 * 속도 벡터
@@ -79,6 +87,7 @@ public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainS
             return;
         }
 
+        updateCollisionRect();
         // 아직 도달 안 했으면 이동
         super.update();
     }
@@ -92,5 +101,12 @@ public class Fruits extends Sprite implements IRecyclable , ILayerProvider<MainS
     @Override
     public MainScene.Layer getLayer() {
         return MainScene.Layer.Fruit;
+    }
+
+    @Override
+    public RectF getCollisionRect()
+    {
+        return collisionRect;
+
     }
 }

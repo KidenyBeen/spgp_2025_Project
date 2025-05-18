@@ -121,7 +121,9 @@ public class Scene {
     // Game Loop Functions
     public void update() {
         for (ArrayList<IGameObject> gameObjects : layers) {
+            //count를 for 시작하기 전에 size를 조정하고 들어가는 이유는 삭제와 같은 행위가 생겼을때 for문을 시작하기전 해당 리스트의 길이를 동적으로 변경하기 위해서
             int count = gameObjects.size();
+            //뒤에서 부터 읽는 이유는 삭제와 같은 상황이 발생했을때 인덱스 범위 오차 그리고 다음을 건너뛰고 동작하는 문제를 해결할 수 있는 가장 간단한 방법.
             for (int i = count - 1; i >= 0; i--) {
                 IGameObject gobj = gameObjects.get(i);
                 gobj.update();
