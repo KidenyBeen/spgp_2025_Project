@@ -3,6 +3,7 @@ package com.example.ajm1222.and.a2dg.framework.util;
 import android.graphics.RectF;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.IBoxCollidable;
+import com.example.ajm1222.and.a2dg.framework.interfaces.IDotCollidable;
 
 public class CollisionHelper {
 
@@ -17,5 +18,12 @@ public class CollisionHelper {
         if (r1.right < r2.left) return false;
         if (r1.bottom < r2.top) return false;
         return true;
+    }
+
+    public static boolean collides(IDotCollidable dot, IBoxCollidable box)
+    {
+        float[] pt = dot.getCollisionPoint();
+        RectF rect = box.getCollisionRect();
+        return rect.contains(pt[0], pt[1]);
     }
 }
