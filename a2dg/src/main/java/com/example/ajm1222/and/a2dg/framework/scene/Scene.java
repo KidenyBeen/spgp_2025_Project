@@ -54,7 +54,7 @@ public class Scene {
         remove(layerIndex, gameObject);
     }
 
-    private void remove(int layerIndex, IGameObject gobj) {
+    private void remove(int layerIndex, IGameObject gobj) { //
         ArrayList<IGameObject> gameObjects = layers.get(layerIndex);
         gameObjects.remove(gobj);
         if (gobj instanceof IRecyclable) {
@@ -63,10 +63,12 @@ public class Scene {
         }
     }
 
+    //특정 레이어의 GameObject 리스트를 반환한다
     public <E extends Enum<E>> ArrayList<IGameObject> objectsAt(E layer) { //
             int layerIndex = layer.ordinal();
             return layers.get(layerIndex);
         }
+    // 전체 레이어를 순회하며 포함된 GameObject 수를 합산한다.
         public int count() {
 
             int total = 0;
@@ -75,6 +77,7 @@ public class Scene {
             }
             return total;
         }
+    // 특정 레이어에 포함된 GameObject 수를 반환한다.
     public <E extends Enum<E>> int countAt(E layer) {
         int layerIndex = layer.ordinal();
         return layers.get(layerIndex).size();

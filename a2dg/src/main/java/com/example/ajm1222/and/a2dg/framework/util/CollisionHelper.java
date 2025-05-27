@@ -20,7 +20,7 @@ public class CollisionHelper {
         return true;
     }
 
-    public static boolean collides(IDotCollidable dot, IBoxCollidable box)
+    public static boolean collides(IDotCollidable dot, IBoxCollidable box) //점과 사각형의 충돌 처리 추가
     {
         float[] pt = dot.getCollisionPoint();
         RectF rect = box.getCollisionRect();

@@ -27,7 +27,10 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
     public static Fruits get(int index, float x, float y, float targetX, float targetY)
     {
         return Scene.top().getRecyclable(Fruits.class).init(index, x, y, targetX, targetY);
+        //Scene.top은 현재 Scene을 의미한다.
+        //현재 Scene의 IRecyclabel을 상속하고있으며 Fruits 클래스를 갖고있는 객체를 가져와서 init을 처리한다.
     }
+
     public Fruits()
     {
         super(R.mipmap.fruits_100x100_sprite_sheet);
@@ -35,7 +38,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
         width = height = 300;
     }
 
-    private Fruits init(int index, float x, float y, float targetX, float targetY)
+    private Fruits init(int index, float x, float y, float targetX, float targetY) //팩토리 패턴으로
     {
         setSrcRect(index);
         setPosition(x, y, width,height);

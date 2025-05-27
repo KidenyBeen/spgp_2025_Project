@@ -18,8 +18,7 @@ public class CollisionChecker implements IGameObject {
     @Override
     public void update() {
 /*
-1. 충돌 박스를 원으로 변경 ==> 과일들을 원으로 생각할꺼니까
-2. 원과 선의 충돌 처리를 생각 ==> 터치 시스템에 선으로 표현할 예정.
+
  */
 
 //        ArrayList<IGameObject> enemies = scene.objectsAt(MainScene.Layer.enemy);
@@ -37,6 +36,24 @@ public class CollisionChecker implements IGameObject {
 //                }
 //            }
 //        }
+        ArrayList<IGameObject> dots = scene.objectsAt(MainScene.Layer.TouchDot);
+        for(int d = dots.size() - 1 ; d >= 0; d--)
+        {
+            TouchDot dot = (TouchDot)dots.get(d);
+            ArrayList<IGameObject> Fruitss = scene.objectsAt(MainScene.Layer.Fruit);
+            for(int f = Fruitss.size()- 1 ; f >= 0; f--)
+            {
+                Fruits fruit = (Fruits)Fruitss.get(f);
+                if(CollisionHelper.collides(dot,fruit))
+                {
+                    scene.remove(fruit);
+                }
+            }
+        }
+
+
+
+
     }
 
     @Override
