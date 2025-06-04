@@ -180,7 +180,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
         canvas.restore();
         if (drawsDebugStuffs) { //디버깅일때만 출력이 될 것이다. build.gradle.kts에 추가해둔 내용이 존재하며 이걸로 인해 가능한것
-            drawDebugInfo(canvas);
+            drawDebugInfo(canvas, scene);
         }
     }
 
@@ -255,7 +255,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
                 canvas.drawLine(0, y, Metrics.width, y, gridPaint);
             }
     }
-    private void drawDebugInfo(Canvas canvas) {
+    private void drawDebugInfo(Canvas canvas, Scene scene) {
         if (fpsPaint == null) {
             fpsPaint = new Paint();
             fpsPaint.setColor(Color.BLUE);
@@ -263,7 +263,13 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
 
         int fps = (int) (1.0f / frameTime);
-        canvas.drawText("FPS: " + fps, 100f, 200f, fpsPaint);
+        //canvas.drawText("FPS: " + fps, 100f, 200f, fpsPaint);
+        int count = scene != null ? scene.count() : 0;
+        String countsForLayers = scene != null ? scene.getDebugCounts() : "";
+        String countsForBin = scene != null ? scene.getDebugCounts2() : "";
+        canvas.drawText("FPS: " + fps, 80f, 80f, fpsPaint);
+        canvas.drawText(count + " " + countsForLayers, 80f, 160f, fpsPaint);
+        canvas.drawText(count + " " + countsForBin, 80f, 240f, fpsPaint);
     }
 
 

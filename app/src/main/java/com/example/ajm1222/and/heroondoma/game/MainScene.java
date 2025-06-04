@@ -22,26 +22,25 @@ public class MainScene extends Scene {
         public static final int COUNT = values().length;
     }
 
-
     public MainScene(LobyScene.Mode mode)
     {
 
         initLayers(Layer.COUNT); //Scene내에 Layer 종류별로 배열을 초기화
 
         this.score = new Score(R.mipmap.number_24x32, 850f, 50f, 60f);
-        score.setScore(12345);
-
-
+        score.setScore(0);
 
         add(Layer.controller, new FruitsGenerator(this));
         add(Layer.controller , new CollisionChecker(this));
-        //add(TouchDot.get());
-        //add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
-
-        //add(Layer.controller, new CollisionChecker(this)); //
+        add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
 
     }
-
+    public void addScore(int amount) {
+        score.add(amount);
+    }
+    public int getScore() {
+        return score.getScore();
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) { //터치 이벤트를 좀 더 상세히 설정할 필요가 있다.
         //return fighter.onTouch(event);
@@ -74,9 +73,6 @@ public class MainScene extends Scene {
             }
         }
         return true;
-    }
-    private void checkCollision() {
-
     }
 
 

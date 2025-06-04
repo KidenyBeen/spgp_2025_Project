@@ -83,6 +83,39 @@ public class Scene {
         return layers.get(layerIndex).size();
     }
 
+    // 디버깅용 문자열로 각 레이어별 오브젝트 개수를 출력한다. 예: [1, 3, 0, 5]
+    public String getDebugCounts() {
+        StringBuilder sb = new StringBuilder();
+        for (ArrayList<IGameObject> gameObjects : layers) {
+            if (sb.length() == 0) {
+                sb.append('[');
+            } else {
+                sb.append(',');
+            }
+            sb.append(gameObjects.size());
+        }
+        sb.append(']');
+        return sb.toString();
+    }
+
+    public String getDebugCounts2() { //리 사이클링에 쌓이는거 하는 중
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (int i = 0; i < layers.size(); i++) {
+            if (i > 0) sb.append(',');
+            ArrayList<IGameObject> layer = layers.get(i);
+            if (layer.size() > 0 && layer.get(0) instanceof IRecyclable) {
+                Class<?> clazz = layer.get(0).getClass();
+                ArrayList<IRecyclable> bin = recycleBin.get(clazz);
+                sb.append(bin != null ? bin.size() : 0);
+            } else {
+                sb.append(0);
+            }
+        }
+        sb.append(']');
+        return sb.toString();
+    }
+
     //////////////////////////////////////////////////
     //  Object Recycling (재활용 관련)
 // ===============================

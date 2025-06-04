@@ -14,7 +14,7 @@ public class Score implements IGameObject {
     private final Rect srcRect = new Rect();
     private final RectF dstRect = new RectF();
     private final int srcCharWidth, srcCharHeight;
-    private int score;
+    private int score, displayScore;
 
     public Score(int mipmapId, float right, float top, float width) {
         this.bitmap = BitmapPool.get(mipmapId);
@@ -36,11 +36,18 @@ public class Score implements IGameObject {
 
     @Override
     public void update() {
+        if (score < displayScore)
+        {
+            displayScore--;
+        } else if (score > displayScore)
+        {
+            displayScore++;
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
-        int value = this.score;
+        int value = this.displayScore;
         float x = right;
         while (value > 0) {
             int digit = value % 10;
@@ -50,6 +57,10 @@ public class Score implements IGameObject {
             canvas.drawBitmap(bitmap, srcRect, dstRect, null);
             value /= 10;
         }
+    }
+
+    public int getScore() {
+        return score;
     }
 
 }
