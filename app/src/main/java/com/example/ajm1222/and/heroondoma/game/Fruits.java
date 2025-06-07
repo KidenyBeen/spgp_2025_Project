@@ -22,11 +22,12 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
     private static final int BORDER = 0;
 
-    private boolean collisionCheck; // 터치한 점과 충돌한 시점을 파악하기위한 조건문
+
 
     private boolean isColliding = false;         // 현재 충돌 중인지
     private boolean wasColliding = false;        // 이전 프레임에 충돌했는지
     private float collisionX, collisionY; //터치한 지점의 위치 값
+    private float perviousCollsionX, perviousCollsionY;
 
     public static final float _INTERVAL = 0.5f;
 
@@ -34,9 +35,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
     protected RectF collisionRect = new RectF();
 
-
-
-
+    private final MainScene scene;
 
     private float targetX, targetY;
     public static Fruits get(int index, float x, float y, float targetX, float targetY)
@@ -51,6 +50,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
         super(R.mipmap.fruits_100x100_sprite_sheet);
         srcRect = new Rect();
         width = height = 300;
+        scene = (MainScene) Scene.top();
     }
 
     private Fruits init(int index, float x, float y, float targetX, float targetY) //팩토리 패턴으로
@@ -68,8 +68,6 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
         dx = dx / distance * speed;
         dy = dy / distance * speed;
-
-        this.collisionCheck = false;
 
         return this;
     }
@@ -111,42 +109,82 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
         //
 
-        if(collisionCheck) //true라면 충돌을 했다는 의미.
+        if(!wasColliding && isColliding)
         {
-            fruitsTime += GameView.frameTime;
-
-
-
-            if(fruitsTime >= _INTERVAL)
-            {
-                SetCollsionStart(false, -1,-1);
-                fruitsTime = 0;
-            }
+            onCollisionEnter();
         }
+       else if (wasColliding && isColliding)
+       {
+            onCollisionStay();
+        }
+       else if (wasColliding && !isColliding)
+       {
+            onCollisionExit();
+       }
+        wasColliding = isColliding;
+        isColliding = false;
 
         // 아직 도달 안 했으면 이동
         super.update();
     }
 
+    public boolean wasJustCollided() {
+        return !wasColliding && isColliding;
+    }
 
-    public void SetCollsionStart(boolean collisionCheck, float x, float y) //충돌한 위치를 갱신하는 것.
+    public boolean wasJustExited() {
+        return wasColliding && !isColliding;
+    }
+
+
+    public void SetCollisionObjectPosition(float x, float y)
     {
-        this.collisionCheck = collisionCheck;
         this.collisionX = x;
         this.collisionY = y;
-
     }
-
-    public void onCollisionEnter(float x, float y)
+    public void SetOnCollision()
     {
-        this.collisionX = x;
-        this.collisionY = y;
+        isColliding = true;
+    }
+    private void onCollisionEnter() //충돌 시작
+    {
+        perviousCollsionX = collisionX;
+        perviousCollsionY = collisionY;
+    }
+    private void onCollisionStay() //충돌 도중
+    {
+//        scene.remove(this);
+//        scene.addScore(10);
+
+        fruitsTime += GameView.frameTime;
+
+        if(getCollisionDistance() > 50) //빠르게 선을 그으면 된다
+        {
+            scene.remove(this);
+            scene.addScore(10);
+        }
+
+        if(fruitsTime >= _INTERVAL)
+        {
+            perviousCollsionX = collisionX;
+            perviousCollsionY = collisionY;
+            fruitsTime = 0;
+        }
+    }
+    private float getCollisionDistance() //점과 직선 사이의 거리를 알기 위해
+    {
+        float dx = collisionX - perviousCollsionX;
+        float dy = collisionY - perviousCollsionY;
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+    private void onCollisionExit() //충돌한 이후 나갈때
+    {
+        perviousCollsionX = -1;
+        perviousCollsionY = -1;
+        collisionX = -1;
+        collisionY = -1;
     }
 
-    public void onCollisionExit()
-    {
-        
-    }
     @Override
     public void onRecycle()
     {
