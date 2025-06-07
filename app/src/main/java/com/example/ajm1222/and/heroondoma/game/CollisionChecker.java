@@ -28,6 +28,7 @@ public class CollisionChecker implements IGameObject {
                 Fruits fruit = (Fruits)Fruitss.get(f);
                 if(CollisionHelper.collides(dot,fruit))
                 {
+                    //fruit.SetCollsionStart(,,);
                     scene.remove(fruit);
                     scene.addScore(10);
                 }

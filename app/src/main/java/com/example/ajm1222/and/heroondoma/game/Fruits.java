@@ -23,9 +23,20 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
     private static final int BORDER = 0;
 
     private boolean collisionCheck; // 터치한 점과 충돌한 시점을 파악하기위한 조건문
-    private float collisionX, collisionY;
+
+    private boolean isColliding = false;         // 현재 충돌 중인지
+    private boolean wasColliding = false;        // 이전 프레임에 충돌했는지
+    private float collisionX, collisionY; //터치한 지점의 위치 값
+
+    public static final float _INTERVAL = 0.5f;
+
+    private float fruitsTime = 0;
 
     protected RectF collisionRect = new RectF();
+
+
+
+
 
     private float targetX, targetY;
     public static Fruits get(int index, float x, float y, float targetX, float targetY)
@@ -100,17 +111,42 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
         //
 
+        if(collisionCheck) //true라면 충돌을 했다는 의미.
+        {
+            fruitsTime += GameView.frameTime;
+
+
+
+            if(fruitsTime >= _INTERVAL)
+            {
+                SetCollsionStart(false, -1,-1);
+                fruitsTime = 0;
+            }
+        }
 
         // 아직 도달 안 했으면 이동
         super.update();
     }
-    public void SetCollsionStart(boolean collisionCheck, float x, float y)
+
+
+    public void SetCollsionStart(boolean collisionCheck, float x, float y) //충돌한 위치를 갱신하는 것.
     {
         this.collisionCheck = collisionCheck;
         this.collisionX = x;
         this.collisionY = y;
+
     }
 
+    public void onCollisionEnter(float x, float y)
+    {
+        this.collisionX = x;
+        this.collisionY = y;
+    }
+
+    public void onCollisionExit()
+    {
+        
+    }
     @Override
     public void onRecycle()
     {
