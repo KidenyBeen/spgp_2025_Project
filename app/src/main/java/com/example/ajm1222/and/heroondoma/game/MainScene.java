@@ -18,7 +18,7 @@ public class MainScene extends Scene {
 
     //private final Score score;
     public enum Layer {
-         Fruit, TouchDot ,ui, controller;
+         Fruit, FruitSlice,TouchDot ,ui, controller;
         public static final int COUNT = values().length;
     }
 

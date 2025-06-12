@@ -35,6 +35,8 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
     protected RectF collisionRect = new RectF();
 
+    private int n_index; //
+
     private final MainScene scene;
 
     private float targetX, targetY;
@@ -55,6 +57,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
     private Fruits init(int index, float x, float y, float targetX, float targetY) //팩토리 패턴으로
     {
+        n_index = index;
         setSrcRect(index);
         setPosition(x, y, width,height);
         this.targetX = targetX;
@@ -128,13 +131,6 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
         super.update();
     }
 
-    public boolean wasJustCollided() {
-        return !wasColliding && isColliding;
-    }
-
-    public boolean wasJustExited() {
-        return wasColliding && !isColliding;
-    }
 
 
     public void SetCollisionObjectPosition(float x, float y)
@@ -158,10 +154,24 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
         fruitsTime += GameView.frameTime;
 
-        if(getCollisionDistance() > 50) //빠르게 선을 그으면 된다
+        if(getCollisionDistance() > 50) //빠르게 선을 그으면 된다 ==> 선 판정이 되었을떄.
         {
-            scene.remove(this);
             scene.addScore(10);
+            scene.remove(this);
+
+
+            float dx = collisionX - perviousCollsionX;
+            float dy = collisionY - perviousCollsionY;
+
+            float length = (float) Math.sqrt(dx * dx + dy * dy);
+            if (length == 0) return; // 나누기 0 방지
+
+            dx /= length;
+            dy /= length;
+
+            scene.add(FruitSlice.get(n_index,x,y,-dy,dx));
+            scene.add(FruitSlice.get(n_index,x,y,dy,-dx));
+
         }
 
         if(fruitsTime >= _INTERVAL)

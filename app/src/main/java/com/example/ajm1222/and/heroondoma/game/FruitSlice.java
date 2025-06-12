@@ -1,20 +1,30 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.graphics.Matrix;
 import android.graphics.Rect;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.ILayerProvider;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
+import com.example.ajm1222.and.a2dg.framework.view.Metrics;
 import com.example.ajm1222.and.heroondoma.R;
 
 public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<MainScene.Layer>
 
 {
 
-    public static FruitSlice get(int index, float x, float y, float targetX, float targetY)
+    private static final int Fruits_IN_A_ROW = 4;
+
+    private static final int SIZE = 100;
+
+    private static final int BORDER = 0;
+
+    private final int speed = 800;
+
+    public static FruitSlice get(int index, float x, float y, float dx, float dy)
     {
-        return Scene.top().getRecyclable(FruitSlice.class).init();
+        return Scene.top().getRecyclable(FruitSlice.class).init(index, x, y, dx, dy);
     }
 
     public FruitSlice()
@@ -24,30 +34,35 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
         width = height = 300;
     }
 
-    private FruitSlice init() //팩토리 패턴으로
+    private FruitSlice init(int index, float x, float y, float dx, float dy) //팩토리 패턴으로
     {
-//        setSrcRect(index);
-//        setPosition(x, y, width,height);
-//        this.targetX = targetX;
-//        this.targetY = targetY;
-//        updateCollisionRect();
-//        // 방향 벡터 계산
-//        dx = targetX - x;
-//        dy = targetY - y;
-//        float distance = (float)Math.sqrt(dx * dx + dy * dy);
-//        float speed = 200f + random.nextFloat() * 300f; // 200~500
-//
-//        dx = dx / distance * speed;
-//        dy = dy / distance * speed;
+        setSrcRect(index);
+        setPosition(x, y, width,height);
+
+        this.dx = dx * speed;
+        this.dy = dy * speed;
 
         return this;
     }
 
 
+    private void setSrcRect(int index) {
+        int x = index % Fruits_IN_A_ROW;
+        int y = index / Fruits_IN_A_ROW;
+        int left = x * (SIZE + BORDER) + BORDER;
+        int top = y * (SIZE + BORDER) + BORDER;
+        srcRect.set(left, top, left + SIZE, top + SIZE);
+    }
+
     @Override
     public void update() {
 
         super.update();
+
+        if(x < 0 || x> Metrics.width || y < 0 || y > Metrics.height)
+        {
+            Scene.top().remove(this);
+        }
     }
 
 
@@ -59,6 +74,6 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
 
     @Override
     public MainScene.Layer getLayer() {
-        return MainScene.Layer.Fruit;
+        return MainScene.Layer.FruitSlice;
     }
 }
