@@ -18,7 +18,7 @@ public class MainScene extends Scene {
 
     //private final Score score;
     public enum Layer {
-         Fruit, FruitSlice,TouchDot ,ui, controller;
+         Fruit, FruitSlice,Bomb,Doll,TouchDot ,ui, controller;
         public static final int COUNT = values().length;
     }
 
@@ -32,6 +32,7 @@ public class MainScene extends Scene {
 
         add(Layer.controller, new FruitsGenerator(this));
         add(Layer.controller , new CollisionChecker(this));
+        add(Layer.controller, new ObstacleGenerator(this));
         add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
 
     }

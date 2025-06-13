@@ -24,8 +24,8 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
 
 
-    private boolean isColliding = false;         // 현재 충돌 중인지
-    private boolean wasColliding = false;        // 이전 프레임에 충돌했는지
+    private boolean currentColliding = false;         // 현재 충돌 중인지
+    private boolean perviousColliding = false;        // 이전 프레임에 충돌했는지
     private float collisionX, collisionY; //터치한 지점의 위치 값
     private float perviousCollsionX, perviousCollsionY;
 
@@ -112,20 +112,20 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
         //
 
-        if(!wasColliding && isColliding)
+        if(!perviousColliding && currentColliding)
         {
             onCollisionEnter();
         }
-       else if (wasColliding && isColliding)
-       {
+        else if (perviousColliding && currentColliding)
+        {
             onCollisionStay();
         }
-       else if (wasColliding && !isColliding)
-       {
+        else if (perviousColliding && !currentColliding)
+        {
             onCollisionExit();
-       }
-        wasColliding = isColliding;
-        isColliding = false;
+        }
+        perviousColliding = currentColliding;
+        currentColliding = false;
 
         // 아직 도달 안 했으면 이동
         super.update();
@@ -140,7 +140,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
     }
     public void SetOnCollision()
     {
-        isColliding = true;
+        currentColliding = true;
     }
     private void onCollisionEnter() //충돌 시작
     {
@@ -181,12 +181,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
             fruitsTime = 0;
         }
     }
-    private float getCollisionDistance() //점과 직선 사이의 거리를 알기 위해
-    {
-        float dx = collisionX - perviousCollsionX;
-        float dy = collisionY - perviousCollsionY;
-        return (float) Math.sqrt(dx * dx + dy * dy);
-    }
+
     private void onCollisionExit() //충돌한 이후 나갈때
     {
         perviousCollsionX = -1;
@@ -195,6 +190,13 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
         collisionY = -1;
     }
 
+
+    private float getCollisionDistance() //점과 직선 사이의 거리를 알기 위해
+    {
+        float dx = collisionX - perviousCollsionX;
+        float dy = collisionY - perviousCollsionY;
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
     @Override
     public void onRecycle()
     {
