@@ -12,6 +12,12 @@ public class Sound {
     protected static MediaPlayer mediaPlayer;
     protected static SoundPool soundPool;
 
+    private static float masterVolume = 1.0f;
+    private static float bgmVolume = 1.0f;
+    private static float effectVolume = 1.0f;
+
+    private static float feffectVolume;
+
     public static void playMusic(int resId) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -19,6 +25,29 @@ public class Sound {
         mediaPlayer = MediaPlayer.create(GameView.view.getContext(), resId);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+    }
+
+    public static void setMasterVolume(float volume) {
+        masterVolume = volume;
+        applyVolume();
+
+    }
+    private static void applyVolume() {
+
+        float fbgmVolume = bgmVolume * masterVolume;
+        mediaPlayer.setVolume(fbgmVolume, fbgmVolume);
+        feffectVolume = effectVolume * masterVolume;
+
+    }
+    public static void setBgmVolume(float volume)
+    {
+        bgmVolume = volume;
+        mediaPlayer.setVolume(bgmVolume, bgmVolume);
+    }
+
+    public static void seteffectVolume(float volume)
+    {
+        effectVolume = volume;
     }
     public static void stopMusic() {
         if (mediaPlayer == null) return;
@@ -45,7 +74,7 @@ public class Sound {
             soundIdMap.put(resId, soundId);
         }
         // int streamId =
-        pool.play(soundId, 1f, 1f, 1, 0, 1f);
+        pool.play(soundId, feffectVolume, feffectVolume, 1, 0, 1f);
     }
 
     private static SoundPool getSoundPool() {
