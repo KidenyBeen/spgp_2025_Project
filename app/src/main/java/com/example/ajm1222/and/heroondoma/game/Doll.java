@@ -9,6 +9,7 @@ import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.GameView;
+import com.example.ajm1222.and.a2dg.framework.view.Metrics;
 import com.example.ajm1222.and.heroondoma.R;
 
 import java.util.Random;
@@ -17,29 +18,42 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 {
     private final Random random = new Random();
     public static final float _INTERVAL = 0.5f;
-    private float BombTime = 0;
+    private float DollTime = 0;
     private boolean currentColliding = false;         // 현재 충돌 중인지
     private boolean perviousColliding = false;        // 이전 프레임에 충돌했는지
 
+    private static final float DOUBLE_CLICK_INTERVAL = 0.5f; //더블클릭을 위한 간격초
+    private int doubleClickCount = 0; //더블클릭 카운트
+    private float doublicClickTime = 0.0f; //
+
+    private float lifeTime; // 던져지고 몇초 뒤에 삭제
+    private final float throwPower = 800; //던지는 속도
+    private boolean throwSet; // 던지는게 활성화 되면 다른 움직임 제약을 해제하기 위해서
+
+    private int n_index;
+
+    private static final int SIZE = 200;
     private float targetX, targetY;
 
     protected RectF collisionRect = new RectF();
     private final MainScene scene;
-    public static Doll get( float x, float y, float targetX, float targetY)
+    public static Doll get(int index, float x, float y, float targetX, float targetY)
     {
-        return Scene.top().getRecyclable(Doll.class).init( x, y, targetX, targetY);
+        return Scene.top().getRecyclable(Doll.class).init(index ,x, y, targetX, targetY);
     }
 
     public Doll()
     {
-        super(R.mipmap.fruits_100x100_sprite_sheet);
+        super(R.mipmap.doll_sprite_sheet_600x200);
         srcRect = new Rect();
         width = height = 300;
         scene = (MainScene) Scene.top();
     }
 
-    private Doll init( float x, float y, float targetX, float targetY) //팩토리 패턴으로
+    private Doll init( int index , float x, float y, float targetX, float targetY) //팩토리 패턴으로
     {
+        n_index = index;
+        setSrcRect(index);
         setPosition(x, y, width,height);
         this.targetX = targetX;
         this.targetY = targetY;
@@ -53,7 +67,17 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
         dx = dx / distance * speed;
         dy = dy / distance * speed;
 
+        throwSet = false;
+        lifeTime = 0.0f;
+
         return this;
+    }
+    private void setSrcRect(int index) {
+        int x = index ;
+
+        int left = x * (SIZE) ;
+
+        srcRect.set(left, 0, left + SIZE,  SIZE);
     }
 
     private void updateCollisionRect() {
@@ -81,20 +105,33 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
     private void onCollisionStay() //충돌 도중
     {
 
-        BombTime += GameView.frameTime;
+        DollTime += GameView.frameTime;
 
         if(getCollisionDistance() > 50) //빠르게 선을 그으면 된다 ==> 선 판정이 되었을떄.
         {
-//            scene.addScore(10);
-//            scene.remove(this);
-            //터지고, 체력이 깎인다.
+            scene.addScore(-10);
+            scene.remove(this);
+
+
+            float dx = collisionX - perviousCollsionX;
+            float dy = collisionY - perviousCollsionY;
+
+            float length = (float) Math.sqrt(dx * dx + dy * dy);
+            if (length == 0) return; // 나누기 0 방지
+
+            dx /= length;
+            dy /= length;
+
+            scene.add(DollSlice.get(n_index,x,y,-dy,dx));
+            scene.add(DollSlice.get(n_index,x,y,dy,-dx));
+
         }
 
-        if(BombTime >= _INTERVAL)
+        if(DollTime >= _INTERVAL)
         {
             perviousCollsionX = collisionX;
             perviousCollsionY = collisionY;
-            BombTime = 0;
+            DollTime = 0;
         }
     }
 
@@ -104,6 +141,11 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
         perviousCollsionY = -1;
         collisionX = -1;
         collisionY = -1;
+
+        if(!throwSet)
+        {
+            doubleClickCount += 1; //충돌을 떠날때 한 번만 호출되니까
+        }
     }
 
     private float getCollisionDistance() //점과 직선 사이의 거리를 알기 위해
@@ -115,23 +157,55 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 
     @Override
     public void update() {
-        // dx, dy는 방향 * 속도 벡터
+        doublicClickTime += GameView.frameTime;
 
+        if(!throwSet) //던지기 성공하기 전까지는 이걸 계속 호출
+        {
+            boolean arrivedX = (dx < 0 && x < targetX) || (dx > 0 && x >= targetX);
+            boolean arrivedY = (dy < 0 && y < targetY) || (dy > 0 && y > targetY);
 
-        // 목표 지점에 거의 도달했으면 멈추고 재활용
-
-
-        boolean arrivedX = (dx < 0 && x < targetX) || (dx > 0 && x >=targetX);
-        boolean arrivedY = (dy < 0 && y < targetY) || (dy > 0 && y > targetY);
-
-        if (arrivedX && arrivedY) {
-            // 정확히 도착한 위치로 위치 조정
-            dx = 0;
-            dy = 0;
-            setPosition(targetX, targetY, width, height);
-            //Scene.top().remove(this); // 씬에서 제거
-            return;
+            if (arrivedX && arrivedY) {
+                // 정확히 도착한 위치로 위치 조정
+                dx = 0;
+                dy = 0;
+                setPosition(targetX, targetY, width, height);
+                //Scene.top().remove(this); // 씬에서 제거
+                return;
+            }
         }
+        else //던지기 성공 후 2.0초 뒤에 삭제
+        {
+            lifeTime += GameView.frameTime;
+            if(lifeTime > 2.0f)
+            {
+                Scene.top().remove(this);
+            }
+        }
+
+        if (doubleClickCount >= 2) //2번 입력이 되었으면 처리가 가능해야하지 ==>
+        {
+            double angle = random.nextFloat() * Math.PI * 2;
+
+            float spawnRadius = Math.max(Metrics.width, Metrics.height) + 200f;
+            float spawnX = Metrics.width / 2f + (float)(Math.cos(angle) * spawnRadius);
+            float spawnY = Metrics.height / 2f + (float)(Math.sin(angle) * spawnRadius);
+            dx = spawnX - x;
+            dy = spawnY - y;
+
+            float distance = (float)Math.sqrt(dx * dx + dy * dy);
+
+            dx = dx/distance * throwPower;
+            dy = dy/distance * throwPower;
+
+            throwSet = true;
+            doubleClickCount = 0;
+        }
+
+        if (doublicClickTime >= DOUBLE_CLICK_INTERVAL) {
+            doubleClickCount = 0;
+            doublicClickTime = 0.0f;
+        }
+
 
         updateCollisionRect();
 

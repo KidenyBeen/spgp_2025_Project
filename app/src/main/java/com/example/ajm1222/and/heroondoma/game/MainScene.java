@@ -12,13 +12,14 @@ public class MainScene extends Scene {
 
     private static final String TAG = MainScene.class.getSimpleName();
     private final Score score;
+    private final GameTimer timer;
 
     private TouchDot activeDot;
 
 
     //private final Score score;
     public enum Layer {
-         Fruit, FruitSlice,Bomb,Doll,TouchDot ,ui, controller;
+         Fruit, FruitSlice,Bomb,Doll,DollSlice,TouchDot , explosion,ui, controller;
         public static final int COUNT = values().length;
     }
 
@@ -30,17 +31,32 @@ public class MainScene extends Scene {
         this.score = new Score(R.mipmap.number_24x32, 850f, 50f, 60f);
         score.setScore(0);
 
+        this.timer = new GameTimer(R.mipmap.number_24x32, Metrics.width/2.0f, 50f,60f);
+        timer.setTime(100);
+
+
         add(Layer.controller, new FruitsGenerator(this));
         add(Layer.controller , new CollisionChecker(this));
         add(Layer.controller, new ObstacleGenerator(this));
         add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
+        add(Layer.ui, timer);
 
     }
     public void addScore(int amount) {
         score.add(amount);
     }
+
     public int getScore() {
         return score.getScore();
+    }
+
+    public void addTime(int amount)
+    {
+        timer.add(amount);
+    }
+    public int getTime()
+    {
+        return timer.gettime();
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) { //터치 이벤트를 좀 더 상세히 설정할 필요가 있다.

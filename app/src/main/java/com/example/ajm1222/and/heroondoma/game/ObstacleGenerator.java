@@ -39,12 +39,14 @@ public class ObstacleGenerator implements IGameObject
         if(dollTime < 0)
         {
             generate(1);
-            bombTime = GEN_INTERVAL_DOLL;
+            dollTime = GEN_INTERVAL_DOLL;
         }
     }
 
     private void generate(int selectNum)
     {
+
+        int index = random.nextInt(3);
         // 화면 테두리 바깥 원형 랜덤 위치 생성
         double angle = random.nextFloat() * Math.PI * 2;
 
@@ -66,7 +68,7 @@ public class ObstacleGenerator implements IGameObject
             }
             case 1:
             {
-                scene.add(Doll.get(spawnX,spawnY,targetX,targetY));
+                scene.add(Doll.get(index,spawnX,spawnY,targetX,targetY));
                break;
             }
             default:

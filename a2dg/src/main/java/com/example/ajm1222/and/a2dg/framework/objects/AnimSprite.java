@@ -9,7 +9,8 @@ public class AnimSprite extends Sprite {
     protected int frameWidth; // 한 프레임의 이미지 크기
     protected int frameHeight; //
 
-    protected final long createdOn; // 객체가 생성된 시각
+    //protected final long createdOn; // 객체가 생성된 시각
+    protected long createdOn;
     public AnimSprite(int mipmapId, float fps) //리소스 ID, 애니메이션 속도, 비어있으면 프레임 개수 0으로 자동 계산
     {
         this(mipmapId, fps, 0);

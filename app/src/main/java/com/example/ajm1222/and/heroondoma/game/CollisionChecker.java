@@ -23,16 +23,36 @@ public class CollisionChecker implements IGameObject {
         {
             TouchDot dot = (TouchDot)dots.get(d);
             ArrayList<IGameObject> Fruitss = scene.objectsAt(MainScene.Layer.Fruit);
-            for(int f = Fruitss.size()- 1 ; f >= 0; f--)
+            ArrayList<IGameObject> Bombs = scene.objectsAt(MainScene.Layer.Bomb);
+            ArrayList<IGameObject> Dolls = scene.objectsAt(MainScene.Layer.Doll);
+            for(int f = Fruitss.size()- 1 ; f >= 0; f--) //과일이랑 충돌
             {
                 Fruits fruit = (Fruits)Fruitss.get(f);
                 if(CollisionHelper.collides(dot,fruit))
                 {
                     fruit.SetCollisionObjectPosition(dot.x, dot.y);
                     fruit.SetOnCollision();
-                    //fruit.SetCollsionStart(,,);
-//                    scene.remove(fruit);
-//                    scene.addScore(10);
+
+                }
+            }
+            for(int f = Bombs.size()- 1 ; f >= 0; f--) // 폭탄이랑 충돌
+            {
+                Bomb bomb = (Bomb)Bombs.get(f);
+                if(CollisionHelper.collides(dot,bomb))
+                {
+                    bomb.SetCollisionObjectPosition(dot.x, dot.y);
+                    bomb.SetOnCollision();
+
+                }
+            }
+            for(int f = Dolls.size()- 1 ; f >= 0; f--) //돌이랑 충돌
+            {
+                Doll doll = (Doll)Dolls.get(f);
+                if(CollisionHelper.collides(dot,doll))
+                {
+                    doll.SetCollisionObjectPosition(dot.x, dot.y);
+                    doll.SetOnCollision();
+
                 }
             }
         }
