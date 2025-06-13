@@ -13,9 +13,13 @@
         android:theme="@style/Theme.HeroOnDoma"
         tools:targetApi="31">
         <activity
+            android:name=".app.OptionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.HeroOnDoma" />
+        <activity
             android:name=".app.HeroOnDomaActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".app.MainActivity"
             android:exported="true">

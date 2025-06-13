@@ -13,22 +13,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ajm1222.and.heroondoma.R;
 
-public class MainActivity extends AppCompatActivity {
-
+public class OptionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_option);
     }
 
-    public void onBtnStartGame(View view) {
 
-        startActivity(new Intent(this, HeroOnDomaActivity.class));
-
-    }
-
-    public void onBtnOption(View view) {
-
-        startActivity(new Intent(this, OptionActivity.class));
-    }
 }

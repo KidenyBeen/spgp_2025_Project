@@ -2,6 +2,8 @@ package com.example.ajm1222.and.heroondoma.game;
 
 import android.view.MotionEvent;
 
+import com.example.ajm1222.and.a2dg.framework.interfaces.IGameObject;
+import com.example.ajm1222.and.a2dg.framework.objects.Button;
 import com.example.ajm1222.and.a2dg.framework.objects.Score;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.Metrics;
@@ -19,7 +21,7 @@ public class MainScene extends Scene {
 
     //private final Score score;
     public enum Layer {
-         Fruit, FruitSlice,Bomb,Doll,DollSlice,TouchDot , explosion,ui, controller;
+         Fruit, FruitSlice,Bomb,Doll,DollSlice,TouchDot , explosion,ui, controller, touch;
         public static final int COUNT = values().length;
     }
 
@@ -41,6 +43,16 @@ public class MainScene extends Scene {
         add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
         add(Layer.ui, timer);
 
+        add(Layer.touch, new Button(R.mipmap.btn_pause, 850f, 0.0f, 100f, 100f, new Button.OnTouchListener() {
+            @Override
+            public boolean onTouch(boolean pressed) {
+                if(pressed) {
+                    new PauseScene().push();
+                }
+                return false;
+            }
+        }));
+
     }
     public void addScore(int amount) {
         score.add(amount);
@@ -58,8 +70,19 @@ public class MainScene extends Scene {
     {
         return timer.gettime();
     }
+
+    @Override
+    protected int getTouchLayerIndex() {
+    return MainScene.Layer.touch.ordinal();
+}
     @Override
     public boolean onTouchEvent(MotionEvent event) { //터치 이벤트를 좀 더 상세히 설정할 필요가 있다.
+
+
+        // 1. 버튼 터치 처리: DOWN만 버튼에게 넘기고, 이후 처리는 TouchDot과 별개로 진행
+        boolean handled = super.onTouchEvent(event);
+        if (handled) return true;
+
         //return fighter.onTouch(event);
         float[] pts = Metrics.fromScreen(event.getX(), event.getY());
         float x = pts[0], y = pts[1];
@@ -89,7 +112,29 @@ public class MainScene extends Scene {
                 break;
             }
         }
+
         return true;
+    }
+
+    @Override
+    public void update()
+    {
+        super.update();
+
+        if(getTime() ==0) //시간이 전부 끝나면
+        {
+            new PauseScene().push();
+        }
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onResume() {
+
     }
 
 

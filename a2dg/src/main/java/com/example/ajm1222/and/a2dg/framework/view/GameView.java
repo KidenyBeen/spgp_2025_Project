@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
+import android.util.Log;
 import android.view.Choreographer;
 import android.view.MotionEvent;
 import android.view.View;
@@ -124,6 +125,19 @@ public class GameView extends View implements Choreographer.FrameCallback {
         return top;
     }
 
+    public void popAllScenes() {
+        int count = sceneStack.size();
+        Log.d(TAG, "in popAllScenes(), scenes count = " + count);
+        for (int i = count - 1; i >= 0; i--) {
+            Scene scene = sceneStack.get(i);
+            scene.onExit();
+        }
+        sceneStack.clear();
+        if (count > 0) {
+            notifyEmptyStack();
+        }
+    }
+
     private void notifyEmptyStack() {
         if (emptyStackListener != null) {
             emptyStackListener.onEmptyStack();
@@ -173,10 +187,15 @@ public class GameView extends View implements Choreographer.FrameCallback {
 //            ball.draw(canvas);
 //        }
 //        fighter.draw(canvas);
+//        Scene scene = getTopScene();
+//        if(scene != null)
+//        {
+//            scene.draw(canvas);
+//        }
         Scene scene = getTopScene();
-        if(scene != null)
-        {
-            scene.draw(canvas);
+        int topSceneIndex = sceneStack.size() - 1;
+        if (topSceneIndex >= 0) {
+            draw(canvas, topSceneIndex);
         }
         canvas.restore();
         if (drawsDebugStuffs) { //디버깅일때만 출력이 될 것이다. build.gradle.kts에 추가해둔 내용이 존재하며 이걸로 인해 가능한것
@@ -184,6 +203,13 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
     }
 
+    private void draw(Canvas canvas, int sceneIndex) {
+        Scene scene = sceneStack.get(sceneIndex);
+        if (scene.isTransparent()) {
+            draw(canvas, sceneIndex - 1);
+        }
+        scene.draw(canvas);
+    }
     // 터치 이벤트를 제어하는거니까 이건 내 프로젝트에서 충분히 쓰인다.
     @Override
     public boolean onTouchEvent(MotionEvent event) //안드로이드에서 터치 이벤트 제어
