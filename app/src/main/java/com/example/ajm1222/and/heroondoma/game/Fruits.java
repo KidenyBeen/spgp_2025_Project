@@ -8,6 +8,7 @@ import com.example.ajm1222.and.a2dg.framework.interfaces.ILayerProvider;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.AnimSprite;
 import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
+import com.example.ajm1222.and.a2dg.framework.res.Sound;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.GameView;
 import com.example.ajm1222.and.heroondoma.R;
@@ -159,6 +160,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
             scene.addScore(10);
             scene.remove(this);
 
+            Sound.playEffect(R.raw.slice_apple_on_wood);
 
             float dx = collisionX - perviousCollsionX;
             float dy = collisionY - perviousCollsionY;

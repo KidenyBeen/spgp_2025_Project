@@ -51,7 +51,6 @@ public class OptionActivity extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 prefs.edit().putFloat(key, value).apply();
 
-
             }
 
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}

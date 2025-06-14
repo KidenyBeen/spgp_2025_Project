@@ -1,5 +1,7 @@
 package com.example.ajm1222.and.a2dg.framework.res;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -16,15 +18,31 @@ public class Sound {
     private static float bgmVolume = 1.0f;
     private static float effectVolume = 1.0f;
 
+
+    private static final String PREFS_NAME = "sound_preferences";
+    private static final String KEY_MASTER = "master_volume";
+    private static final String KEY_BGM = "bgm_volume";
+    private static final String KEY_SFX = "sfx_volume";
+
+
     private static float feffectVolume;
 
     public static void playMusic(int resId) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
+
+
         mediaPlayer = MediaPlayer.create(GameView.view.getContext(), resId);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
+
+        SharedPreferences prefs = GameView.view.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        Sound.setBgmVolume(prefs.getFloat(KEY_BGM, 1.0f));
+        Sound.setMasterVolume(prefs.getFloat(KEY_MASTER, 1.0f));
+        Sound.seteffectVolume(prefs.getFloat(KEY_SFX, 1.0f));
     }
 
     public static void setMasterVolume(float volume) {
@@ -73,7 +91,14 @@ public class Sound {
             soundId = pool.load(GameView.view.getContext(), resId, 1);
             soundIdMap.put(resId, soundId);
         }
+
         // int streamId =
+
+        SharedPreferences prefs = GameView.view.getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        Sound.setMasterVolume(prefs.getFloat(KEY_MASTER, 1.0f));
+        Sound.seteffectVolume(prefs.getFloat(KEY_SFX, 1.0f));
+
         pool.play(soundId, feffectVolume, feffectVolume, 1, 0, 1f);
     }
 

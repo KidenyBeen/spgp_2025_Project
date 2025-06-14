@@ -1,12 +1,15 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.content.SharedPreferences;
 import android.view.MotionEvent;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.IGameObject;
 import com.example.ajm1222.and.a2dg.framework.objects.Button;
 import com.example.ajm1222.and.a2dg.framework.objects.Score;
+import com.example.ajm1222.and.a2dg.framework.res.Sound;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.Metrics;
+
 import com.example.ajm1222.and.heroondoma.R;
 
 
@@ -125,6 +128,20 @@ public class MainScene extends Scene {
         {
             new PauseScene().push();
         }
+    }
+
+
+    @Override
+    public void onEnter() {
+
+        Sound.playMusic(R.raw.funny_bgm_240795);
+
+    }
+
+    @Override
+    public void onExit()
+    {
+        Sound.stopMusic();
     }
 
     @Override
