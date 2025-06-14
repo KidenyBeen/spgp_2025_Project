@@ -15,7 +15,7 @@ import com.example.ajm1222.and.heroondoma.R;
 public class LobyScene extends Scene {
     private static final String TAG = LobyScene.class.getSimpleName();
     public enum Layer {
-        ui, controller, touch;
+        bg,ui, controller, touch;
         public static final int COUNT = values().length;
     }
 
@@ -41,6 +41,10 @@ public class LobyScene extends Scene {
         gap = 300f;               // 버튼 간격
         buttonW = 600f;
         buttonH = 200f;
+
+        float w = Metrics.width, h = Metrics.height;
+
+        add(LobyScene.Layer.bg, new Sprite(R.mipmap.doma, w/2,h/2,w,h));
 
         add(Layer.touch, new Button(R.mipmap.mode1, cx, startY, buttonW, buttonH, new Button.OnTouchListener()
         {

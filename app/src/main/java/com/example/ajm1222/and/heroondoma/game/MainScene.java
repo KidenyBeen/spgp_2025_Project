@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IGameObject;
 import com.example.ajm1222.and.a2dg.framework.objects.Button;
 import com.example.ajm1222.and.a2dg.framework.objects.Score;
+import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
 import com.example.ajm1222.and.a2dg.framework.res.Sound;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.Metrics;
@@ -25,7 +26,7 @@ public class MainScene extends Scene {
 
     //private final Score score;
     public enum Layer {
-         Fruit, FruitSlice,Bomb,Doll,DollSlice,TouchDot , explosion,ui, controller, touch;
+        bg,Fruit, FruitSlice,Bomb,Doll,DollSlice,TouchDot , explosion,ui, controller, touch;
         public static final int COUNT = values().length;
     }
 
@@ -40,8 +41,12 @@ public class MainScene extends Scene {
         this.timer = new GameTimer(R.mipmap.number_24x32, Metrics.width/2.0f, 50f,60f);
         timer.setTime(100);
 
-        this.hp = new HP(R.mipmap.heart_200x200, 850, 800, 100,10);
+        this.hp = new HP(R.mipmap.heart_200x200, Metrics.width - 100, Metrics.height, 100,10);
         hp.setHp(5);
+
+        float w = Metrics.width, h = Metrics.height;
+
+        add(MainScene.Layer.bg, new Sprite(R.mipmap.doma, w/2,h/2,w,h));
 
         add(Layer.controller, new FruitsGenerator(this));
         add(Layer.controller , new CollisionChecker(this));
@@ -54,7 +59,7 @@ public class MainScene extends Scene {
             @Override
             public boolean onTouch(boolean pressed) {
                 if(pressed) {
-                    new PauseScene().push();
+                    new PauseScene(timer, score).push();
                 }
                 return false;
             }
@@ -143,7 +148,7 @@ public class MainScene extends Scene {
 
         if(getTime() ==0 && getHp() <= 0) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
         {
-            new PauseScene().push();
+            new PauseScene(timer,score).push();
         }
     }
 

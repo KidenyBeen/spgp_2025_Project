@@ -74,7 +74,7 @@ public class Bomb  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 
     private void updateCollisionRect() {
         collisionRect.set(dstRect);
-        //collisionRect.inset(50f, 50f);
+        collisionRect.inset(50f, 50f);
     }
 
     private float collisionX, collisionY; //터치한 지점의 위치 값

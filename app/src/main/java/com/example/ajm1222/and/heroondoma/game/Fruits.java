@@ -86,7 +86,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
 
     private void updateCollisionRect() {
         collisionRect.set(dstRect);
-        //collisionRect.inset(50f, 50f);
+        collisionRect.inset(50f, 50f);
     }
     @Override
     public void update() {
