@@ -61,7 +61,7 @@ public class MainScene extends Scene {
             @Override
             public boolean onTouch(boolean pressed) {
                 if(pressed) {
-                    new PauseScene(timer, score).push();
+                    new PauseScene(timer, score, true).push();
                 }
                 return false;
             }
@@ -150,18 +150,40 @@ public class MainScene extends Scene {
     {
         super.update();
 
-        if(getTime() ==0 || getHp() <= 0 ) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
+        switch (mode)
         {
-            new PauseScene(timer,score).push();
+            case TIME_LIMITED:
+            {
+                timer.setActive(true);
+                if(getTime() ==0 || getHp() <= 0 ) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
+                {
+                    new PauseScene(timer,score, false).push();
+                }
+                break;
+            }
+            case INFINITE:
+            {
+                timer.setActive(false);
+                if(getHp() <= 0 ) //체력이 전부다 닳으면
+                {
+                    new PauseScene(timer,score, false).push();
+                }
+                break;
+            }
+            case SCORE_TARGET:
+            {
+                timer.setActive(false);
+                if(score.getScore() >= 1000  || getHp() <= 0) //일정 점수를 넘으면 혹은 체력이 다 닳으면
+                {
+                    new PauseScene(timer,score, false).push();
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
-
-//        switch (mode)
-//        {
-//            case LobyScene.Mode.TIME_LIMITED:
-//            {
-//
-//            }
-//        }
     }
 
 

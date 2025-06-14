@@ -15,12 +15,13 @@ public class PauseScene extends Scene
 {
 
     private final Score score;
+    private boolean scoreType; //모드에 맞춰 조건을 맞추고 종료했는지 혹은 눌러서 종료했는지 구분
 
     public enum Layer {
         bg, ui,title, touch
     }
 
-    public PauseScene(GameTimer timer, Score score ) {
+    public PauseScene(GameTimer timer, Score score , boolean type) {
         initLayers(Layer.values().length);
         float w = Metrics.width, h = Metrics.height;
 
@@ -34,7 +35,7 @@ public class PauseScene extends Scene
             @Override
             public boolean onTouch(boolean pressed) {
 
-                if(pressed)
+                if(pressed && type)
                 {
                     pop();
                 }

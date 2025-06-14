@@ -1,5 +1,6 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -22,9 +23,6 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
     private static final int SIZE = 100;
 
     private static final int BORDER = 0;
-
-
-
     private boolean currentColliding = false;         // 현재 충돌 중인지
     private boolean perviousColliding = false;        // 이전 프레임에 충돌했는지
     private float collisionX, collisionY; //터치한 지점의 위치 값
@@ -132,6 +130,27 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
         super.update();
     }
 
+    private Path createSliceMask(float dx, float dy)  //path 공간 사각형을 만들어서 클리핑 마스킹 공간을 만든다.
+    {
+        float cx = x;
+        float cy = y;
+
+
+        float perpX = -dy * 150f; // 법선 만들었던거의 다시 회전을 시켜 자른 단면 방향 벡터를 얻어낸다.
+        float perpY = dx * 150f;
+
+        Path path = new Path();
+        path.moveTo(cx + perpX, cy + perpY);
+        path.lineTo(cx - perpX, cy - perpY);
+
+
+        path.lineTo(cx - perpX + dx * 1000, cy - perpY + dy * 1000);
+        path.lineTo(cx + perpX + dx * 1000, cy + perpY + dy * 1000);
+        path.close();
+        //
+
+        return path;
+    }
 
 
     public void SetCollisionObjectPosition(float x, float y)
@@ -160,7 +179,7 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
             scene.addScore(10);
             scene.remove(this);
 
-            Sound.playEffect(R.raw.slice_apple_on_wood);
+            Sound.playEffect(R.raw.slice_apple_on_wood); //효과음
 
             float dx = collisionX - perviousCollsionX;
             float dy = collisionY - perviousCollsionY;
@@ -171,8 +190,11 @@ public class Fruits extends Sprite implements IRecyclable , IBoxCollidable, ILay
             dx /= length;
             dy /= length;
 
-            scene.add(FruitSlice.get(n_index,x,y,-dy,dx));
-            scene.add(FruitSlice.get(n_index,x,y,dy,-dx));
+            Path leftMask = createSliceMask(-dy, dx);
+            Path rightMask = createSliceMask(dy, -dx);
+
+            scene.add(FruitSlice.get(n_index,x,y,-dy,dx, leftMask));
+            scene.add(FruitSlice.get(n_index,x,y,dy,-dx, rightMask));
 
         }
 

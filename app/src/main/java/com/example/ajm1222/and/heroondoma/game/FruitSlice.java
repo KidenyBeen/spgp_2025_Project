@@ -1,7 +1,10 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.ILayerProvider;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
@@ -14,6 +17,7 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
 
 {
 
+    private float initialX, initialY;
     private static final int Fruits_IN_A_ROW = 4;
 
     private static final int SIZE = 100;
@@ -22,9 +26,11 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
 
     private final int speed = 800;
 
-    public static FruitSlice get(int index, float x, float y, float dx, float dy)
+    private Path maskPath = null;
+
+    public static FruitSlice get(int index, float x, float y, float dx, float dy, Path maskPath)
     {
-        return Scene.top().getRecyclable(FruitSlice.class).init(index, x, y, dx, dy);
+        return Scene.top().getRecyclable(FruitSlice.class).init(index, x, y, dx, dy,maskPath);
     }
 
     public FruitSlice()
@@ -34,14 +40,15 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
         width = height = 300;
     }
 
-    private FruitSlice init(int index, float x, float y, float dx, float dy) //팩토리 패턴으로
+    private FruitSlice init(int index, float x, float y, float dx, float dy, Path maskPath) //팩토리 패턴으로
     {
         setSrcRect(index);
         setPosition(x, y, width,height);
-
+        initialX = x;
+        initialY = y;
         this.dx = dx * speed;
         this.dy = dy * speed;
-
+        this.maskPath =maskPath;
         return this;
     }
 
@@ -65,6 +72,25 @@ public class FruitSlice extends Sprite implements IRecyclable, ILayerProvider<Ma
         }
     }
 
+
+    @Override
+    public void draw(Canvas canvas) {
+
+
+        if (maskPath != null) {
+            canvas.save();
+
+            maskPath.offset(x - initialX, y -initialY);
+            // 클리핑
+            canvas.clipPath(maskPath);
+            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+
+            canvas.restore();
+
+            initialX = x;
+            initialY = y;
+        }
+    }
 
     @Override
     public void onRecycle()

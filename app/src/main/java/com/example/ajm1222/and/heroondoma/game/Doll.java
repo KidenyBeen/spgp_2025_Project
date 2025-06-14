@@ -1,5 +1,6 @@
 package com.example.ajm1222.and.heroondoma.game;
 
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -98,6 +99,26 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
     {
         currentColliding = true;
     }
+
+    private Path createSliceMask(float dx, float dy) {
+        float cx = x;
+        float cy = y;
+
+        //
+        float perpX = -dy * 150f; // 수직 방향
+        float perpY = dx * 150f;
+
+        Path path = new Path();
+        path.moveTo(cx + perpX, cy + perpY);
+        path.lineTo(cx - perpX, cy - perpY);
+
+        //
+        path.lineTo(cx - perpX + dx * 1000, cy - perpY + dy * 1000);
+        path.lineTo(cx + perpX + dx * 1000, cy + perpY + dy * 1000);
+        path.close();
+
+        return path;
+    }
     private void onCollisionEnter() //충돌 시작
     {
         perviousCollsionX = collisionX;
@@ -124,8 +145,11 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
             dx /= length;
             dy /= length;
 
-            scene.add(DollSlice.get(n_index,x,y,-dy,dx));
-            scene.add(DollSlice.get(n_index,x,y,dy,-dx));
+            Path leftMask = createSliceMask(-dy, dx);
+            Path rightMask = createSliceMask(dy, -dx);
+
+            scene.add(DollSlice.get(n_index,x,y,-dy,dx, leftMask));
+            scene.add(DollSlice.get(n_index,x,y,dy,-dx, rightMask));
 
         }
 
