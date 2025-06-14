@@ -143,6 +143,7 @@ GitHub Insights의 Commit 기록과 실제 날짜 기준 정리를 아래에 함
 ---
 
 ## 주차별 Commit 수 (최종 기준)
+<img src="https://github.com/user-attachments/assets/65c09fcf-e4d5-4ebc-8e87-32d0ddd4a157" alt="커밋 그래프" width="600"/>
 
 | 주차   | 날짜 범위               | Commit 수 |
 |--------|-------------------------|-----------|
