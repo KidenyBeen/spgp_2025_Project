@@ -7,6 +7,7 @@ import com.example.ajm1222.and.a2dg.framework.interfaces.IBoxCollidable;
 import com.example.ajm1222.and.a2dg.framework.interfaces.ILayerProvider;
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.Sprite;
+import com.example.ajm1222.and.a2dg.framework.res.Sound;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.a2dg.framework.view.GameView;
 import com.example.ajm1222.and.a2dg.framework.view.Metrics;
@@ -106,6 +107,9 @@ public class Bomb  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 //            scene.addScore(10);
 //            scene.remove(this);
             //터지고, 체력이 깎인다.
+
+            Sound.playEffect(R.raw.slice_apple_on_wood);
+            scene.addHp(-1);
             scene.add(MainScene.Layer.explosion,Explosion.get(x,y,100));
             scene.remove(this);
         }
@@ -184,6 +188,8 @@ public class Bomb  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 
             throwSet = true;
             doubleClickCount = 0;
+
+            Sound.playEffect(R.raw.swipe2);
         }
 
         if (doublicClickTime >= DOUBLE_CLICK_INTERVAL) {

@@ -201,6 +201,8 @@ public class Doll  extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 
             throwSet = true;
             doubleClickCount = 0;
+
+            Sound.playEffect(R.raw.swipe2);
         }
 
         if (doublicClickTime >= DOUBLE_CLICK_INTERVAL) {

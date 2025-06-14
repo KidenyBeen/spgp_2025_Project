@@ -2,6 +2,7 @@ package com.example.ajm1222.and.heroondoma.game;
 
 import com.example.ajm1222.and.a2dg.framework.interfaces.IRecyclable;
 import com.example.ajm1222.and.a2dg.framework.objects.AnimSprite;
+import com.example.ajm1222.and.a2dg.framework.res.Sound;
 import com.example.ajm1222.and.a2dg.framework.scene.Scene;
 import com.example.ajm1222.and.heroondoma.R;
 
@@ -18,6 +19,7 @@ public class Explosion extends AnimSprite implements IRecyclable
     private Explosion init(float x, float y, float radius) {
         setPosition(x, y, radius);
         createdOn = System.currentTimeMillis();
+        Sound.playEffect(R.raw.explosion);
         return this;
     }
 

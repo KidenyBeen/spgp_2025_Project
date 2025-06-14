@@ -19,6 +19,7 @@ public class MainScene extends Scene {
     private final Score score;
     private final GameTimer timer;
 
+    private final HP hp;
     private TouchDot activeDot;
 
 
@@ -39,12 +40,15 @@ public class MainScene extends Scene {
         this.timer = new GameTimer(R.mipmap.number_24x32, Metrics.width/2.0f, 50f,60f);
         timer.setTime(100);
 
+        this.hp = new HP(R.mipmap.heart_200x200, 850, 800, 100,10);
+        hp.setHp(5);
 
         add(Layer.controller, new FruitsGenerator(this));
         add(Layer.controller , new CollisionChecker(this));
         add(Layer.controller, new ObstacleGenerator(this));
         add(Layer.ui, score); //ILayerProvider를 상속하지 않은 친구에 추가 방법
         add(Layer.ui, timer);
+        add(Layer.ui, hp);
 
         add(Layer.touch, new Button(R.mipmap.btn_pause, 850f, 0.0f, 100f, 100f, new Button.OnTouchListener() {
             @Override
@@ -72,6 +76,19 @@ public class MainScene extends Scene {
     public int getTime()
     {
         return timer.gettime();
+    }
+
+    public void setHP(int amount)
+    {
+        hp.setHp(amount);
+    }
+    public void addHp(int amount)
+    {
+        hp.add(amount);
+    }
+    public int getHp()
+    {
+        return hp.getHp();
     }
 
     @Override
@@ -124,7 +141,7 @@ public class MainScene extends Scene {
     {
         super.update();
 
-        if(getTime() ==0) //시간이 전부 끝나면
+        if(getTime() ==0 && getHp() <= 0) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
         {
             new PauseScene().push();
         }
