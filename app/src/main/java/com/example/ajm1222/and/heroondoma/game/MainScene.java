@@ -23,6 +23,7 @@ public class MainScene extends Scene {
     private final HP hp;
     private TouchDot activeDot;
 
+    private LobyScene.Mode mode;
 
     //private final Score score;
     public enum Layer {
@@ -33,12 +34,13 @@ public class MainScene extends Scene {
     public MainScene(LobyScene.Mode mode)
     {
 
+        this.mode = mode;
         initLayers(Layer.COUNT); //Scene내에 Layer 종류별로 배열을 초기화
 
         this.score = new Score(R.mipmap.number_24x32, 850f, 50f, 60f);
         score.setScore(0);
 
-        this.timer = new GameTimer(R.mipmap.number_24x32, Metrics.width/2.0f, 50f,60f);
+        this.timer = new GameTimer(R.mipmap.number_24x32, Metrics.width/2.0f, 50f,60f, true);
         timer.setTime(100);
 
         this.hp = new HP(R.mipmap.heart_200x200, Metrics.width - 100, Metrics.height, 100,10);
@@ -64,6 +66,8 @@ public class MainScene extends Scene {
                 return false;
             }
         }));
+
+        add(Layer.ui, new FadeInOverlay(this));
 
     }
     public void addScore(int amount) {
@@ -146,10 +150,18 @@ public class MainScene extends Scene {
     {
         super.update();
 
-        if(getTime() ==0 && getHp() <= 0) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
+        if(getTime() ==0 || getHp() <= 0 ) //시간이 전부 끝나면 혹은 체력이 전부다 닳으면
         {
             new PauseScene(timer,score).push();
         }
+
+//        switch (mode)
+//        {
+//            case LobyScene.Mode.TIME_LIMITED:
+//            {
+//
+//            }
+//        }
     }
 
 

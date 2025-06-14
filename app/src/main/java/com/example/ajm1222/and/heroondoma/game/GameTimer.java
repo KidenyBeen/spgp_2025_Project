@@ -19,7 +19,10 @@ public class GameTimer implements IGameObject
     private int time, displayTime;
     private float timeelapsed;
 
-    public GameTimer(int mipmapId, float right, float top, float width) {
+    private boolean istimeActive; //
+
+
+    public GameTimer(int mipmapId, float right, float top, float width, boolean active ) {
         this.bitmap = BitmapPool.get(mipmapId);
         this.right = right;
         this.top = top;
@@ -27,6 +30,8 @@ public class GameTimer implements IGameObject
         this.srcCharWidth = bitmap.getWidth() / 10;
         this.srcCharHeight = bitmap.getHeight();
         this.dstCharHeight = dstCharWidth * srcCharHeight / srcCharWidth;
+        this.istimeActive = active;
+
     }
 
     public void setTime(int time) {// 초기시간을 설정하는
@@ -37,24 +42,26 @@ public class GameTimer implements IGameObject
         time += amount;
     }
 
+    public void setActive(boolean active) {istimeActive = active;}
     @Override
     public void update() {
 
         timeelapsed += GameView.frameTime;
 
-        if (timeelapsed >= 1.0f) {
-            if (time > 0) {
-                time--;
+        if(istimeActive)
+        {
+            if (timeelapsed >= 1.0f) {
+                if (time > 0) {
+                    time--;
+                }
+                timeelapsed -= 1.0f;
             }
-            timeelapsed -= 1.0f;
-        }
 
-        if (time < displayTime)
-        {
-            displayTime--;
-        } else if (time > displayTime)
-        {
-            displayTime++;
+            if (time < displayTime) {
+                displayTime--;
+            } else if (time > displayTime) {
+                displayTime++;
+            }
         }
 
     }

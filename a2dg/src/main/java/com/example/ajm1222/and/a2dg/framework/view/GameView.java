@@ -178,20 +178,8 @@ public class GameView extends View implements Choreographer.FrameCallback {
         Metrics.concat(canvas);
         if (drawsDebugStuffs) {
             drawDebugBackground(canvas);
-        }//출시할때 빼면 된다능
-//        for (BouncingCircle bc : circles) {
-//            bc.draw(canvas);
-//        }
-//        for(Ball ball : balls) //C#의 foreach문이랑 같아보이네
-//        {
-//            ball.draw(canvas);
-//        }
-//        fighter.draw(canvas);
-//        Scene scene = getTopScene();
-//        if(scene != null)
-//        {
-//            scene.draw(canvas);
-//        }
+        }
+
         Scene scene = getTopScene();
         int topSceneIndex = sceneStack.size() - 1;
         if (topSceneIndex >= 0) {
